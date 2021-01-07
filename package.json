@@ -1,0 +1,24 @@
+{
+  "name": "my-webpack-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "babel-loader": "^8.2.2",
+    "cheerio": "^1.0.0-rc.5",
+    "copy-webpack-plugin": "^7.0.0",
+    "cozy-client-js": "^0.17.4",
+    "cozy-konnector-libs": "^4.38.2",
+    "moment-timezone": "^0.5.32"
+  },
+  "scripts": {
+    "build": "webpack"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.12.11",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "webpack": "^4",
+    "webpack-cli": "^3"
+  },
+  "description": "My webpack project"
+}
