@@ -12,7 +12,8 @@
     "moment-timezone": "^0.5.32"
   },
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+	"prebuild": "make-token testchristophe.cozy.works io.cozy.files | xargs -I{} cp {} src/token.json"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.12.11",
