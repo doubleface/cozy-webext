@@ -1,15 +1,14 @@
-# 🚀 Welcome to your new awesome project!
+# 🚀 POC connecteur dans un webextension
 
-This project has been created using **webpack scaffold**, you can now run
+Le but de ce poc est de valider qu'on puisse récupérer des fichiers sur un site donné, ici oui.sncf
+et envoyer les fichiers sur un cozy donnée (en dur dans le code)
+
+Cela suppose un accès à la prod pour pouvoir lancer la commande make-token
+Et le test est ici fait avec testchristophe.cozy.works
+
+## build
 
 ```
-npm run build
-```
-
-or
-
-```
+yarn
 yarn build
 ```
-
-to bundle your application
