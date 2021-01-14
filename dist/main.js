@@ -109,9 +109,9 @@ async function start() {
   }
 
   const commands = await fetchCommands()
-  console.log('commands', commands)
+  console.info('commands', commands)
 
-  window.postMessage({ message: 'file', value: commands }, '*')
+  window.postMessage({ message: 'files', value: commands }, '*')
 }
 
 async function fetchCommands() {
@@ -124,11 +124,14 @@ async function fetchCommands() {
   const $ = cheerio__WEBPACK_IMPORTED_MODULE_1___default.a.load(resp)
   const links = Array.from(
     $(`.show-for-small-only a[title='Justificatif']`)
-  ).map((e) => $(e).attr('href'))
+  ).map((e) => $(e).attr('href').replace(':80', '').replace('http', 'https'))
 
-  const filelink = links.pop().replace(':80', '').replace('http', 'https')
-  const file = await ky__WEBPACK_IMPORTED_MODULE_0__["default"].get(filelink).blob()
-  return file
+  let result = []
+  for (const link of links) {
+    result.push(await ky__WEBPACK_IMPORTED_MODULE_0__["default"].get(link).blob())
+  }
+
+  return result
 }
 async function testLogin() {
   const resp = await ky__WEBPACK_IMPORTED_MODULE_0__["default"].get(
