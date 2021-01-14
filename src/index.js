@@ -1,43 +1,46 @@
-const { Client } = require('cozy-client-js')
-const token = require('./token.json').token
-// const fetchSncf = require('./sncf.js')
+/* eslint-disable no-console */
 
+import ky from 'ky'
 import Cheerio from 'cheerio'
 
-const options = {
-  cozyURL: 'https://testchristophe.cozy.works',
-  token,
-}
-
-const cozyClient = new Client(options)
-
+window.addEventListener('DOMContentLoaded', () => {
+  start()
+})
 async function start() {
-  // await fetchSncf({ folderPath: '/testtext' }, cozyClient)
-  await testOneFile()
-}
-start()
+  const isLogin = await testLogin()
+  if (!isLogin) {
+    console.info('Not logged in')
+    return
+  }
 
-async function testOneFile() {
-  const result = await fetch(
-    `https://www.oui.sncf/espaceclient/ordersconsultation/showOrdersForAjaxRequest?pastOrder=true&cancelledOrder=false&pageToLoad=1&_=${Date.now()}`,
-    {
-      credentials: 'include',
-      referrer: 'https://www.oui.sncf/espaceclient/commandes-en-cours',
-    }
-  )
-  console.log('result', result)
-  const $ = Cheerio.load(await result.text())
+  const commands = await fetchCommands()
+  console.log('commands', commands)
+
+  window.postMessage({ message: 'file', value: commands }, '*')
+}
+
+async function fetchCommands() {
+  const resp = await ky
+    .get(
+      `https://www.oui.sncf/espaceclient/ordersconsultation/showOrdersForAjaxRequest?pastOrder=true&cancelledOrder=false&pageToLoad=1&_=${Date.now()}`
+    )
+    .text()
+
+  const $ = Cheerio.load(resp)
   const links = Array.from(
     $(`.show-for-small-only a[title='Justificatif']`)
   ).map((e) => $(e).attr('href'))
 
   const filelink = links.pop().replace(':80', '').replace('http', 'https')
-  console.log('filelink', filelink)
-  const file = await (await fetch(filelink)).blob()
-  console.log('file', file)
-  const resultFile = await cozyClient.files.create(file, {
-    name: 'test.pdf',
-    dirID: '3fec24be92d97411f4f8c434841aa3b0',
-  })
-  console.log('resultFile', resultFile)
+  const file = await ky.get(filelink).blob()
+  return file
 }
+async function testLogin() {
+  const resp = await ky.get(
+    'https://www.oui.sncf/espaceclient/commandes-en-cours'
+  )
+
+  return !resp.redirected
+}
+
+start().catch((err) => console.error(err))

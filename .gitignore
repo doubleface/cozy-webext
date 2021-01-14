@@ -1,5 +1,4 @@
 # Connector config
-dist/*
 src/token.json
 .account
 .token.json
