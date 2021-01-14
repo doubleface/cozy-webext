@@ -22,13 +22,14 @@ async function start() {
 async function fetchCommands() {
   const resp = await ky
     .get(
-      `https://www.oui.sncf/espaceclient/ordersconsultation/showOrdersForAjaxRequest?pastOrder=true&cancelledOrder=false&pageToLoad=1&_=${Date.now()}`
+      'https://www.oui.sncf/espaceclient/ordersconsultation/showOrdersForAjaxRequest?pastOrder=true&cancelledOrder=false&pageToLoad=1&_=' +
+        Date.now()
     )
     .text()
 
   const $ = Cheerio.load(resp)
   const links = Array.from(
-    $(`.show-for-small-only a[title='Justificatif']`)
+    $(".show-for-small-only a[title='Justificatif']")
   ).map((e) => $(e).attr('href').replace(':80', '').replace('http', 'https'))
 
   let result = []
