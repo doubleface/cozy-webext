@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "webpack",
-	"prebuild": "make-token testchristophe.cozy.works io.cozy.files | xargs -I{} cp {} src/token.json"
+    "prebuild": "make-token testchristophe.cozy.works io.cozy.files | xargs -I{} cp {} src/token.json"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.12.11",
